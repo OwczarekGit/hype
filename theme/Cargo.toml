@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 lib_theme = {path = "../lib_theme"}
+toml = "0.8.8"
