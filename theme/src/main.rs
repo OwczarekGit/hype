@@ -6,4 +6,5 @@ fn main() {
     programs::alacritty::Alacritty.apply(theme.clone());
     programs::wofi::Wofi.apply(theme.clone());
     programs::hyprland::Hyprland.apply(theme.clone());
+    programs::waybar::Waybar.apply(theme.clone());
 }

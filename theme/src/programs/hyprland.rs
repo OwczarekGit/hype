@@ -2,12 +2,13 @@ use std::path::PathBuf;
 
 use lib_theme::core::themeable::Themeable;
 
+use super::config_directory;
+
 pub struct Hyprland;
 
 impl Themeable for Hyprland {
     fn path(&self) -> std::path::PathBuf {
-        let home = env!("HOME");
-        PathBuf::from(format!("{home}/.config/hypr/theme.conf"))
+        PathBuf::from(config_directory() + "/hypr/theme.conf")
     }
 
     fn content(&self, theme: lib_theme::core::theme::Theme) -> String {

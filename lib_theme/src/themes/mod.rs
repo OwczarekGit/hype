@@ -25,17 +25,14 @@ macro_rules! define_theme {
         $c14:expr,
         $c15:expr,
     ) => {
-        pub fn theme() -> crate::core::theme::Theme {
-            use crate::core::palette::Palette;
-            use crate::core::theme::Theme;
-            use std::sync::OnceLock;
-
-            static THEME: OnceLock<Theme> = OnceLock::new();
+        pub fn theme() -> $crate::core::theme::Theme {
+            static THEME: std::sync::OnceLock<$crate::core::theme::Theme> =
+                std::sync::OnceLock::new();
             THEME
                 .get_or_init(|| {
-                    Theme::new(
+                    $crate::core::theme::Theme::new(
                         $name.to_string(),
-                        Palette::new(
+                        $crate::core::palette::Palette::new(
                             $bg, $fg, $c0, $c1, $c2, $c3, $c4, $c5, $c6, $c7, $c8, $c9, $c10, $c11,
                             $c12, $c13, $c14, $c15,
                         ),

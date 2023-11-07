@@ -4,12 +4,13 @@ use lib_theme::core::theme::Theme;
 
 use lib_theme::core::themeable::Themeable;
 
+use super::config_directory;
+
 pub struct Alacritty;
 
 impl Themeable for Alacritty {
     fn path(&self) -> PathBuf {
-        let home = env!("HOME");
-        PathBuf::from(format!("{home}/.config/alacritty/theme.yml"))
+        PathBuf::from(config_directory() + "/alacritty/theme.yml")
     }
 
     fn content(&self, theme: Theme) -> String {
