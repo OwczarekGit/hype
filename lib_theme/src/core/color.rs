@@ -20,13 +20,19 @@ impl Color {
     pub fn a(&self) -> u8 {
         self.0 as u8
     }
-    
+
     pub fn hex_rgb(&self) -> String {
         format!("#{:02X}{:02X}{:02X}", self.r(), self.g(), self.b())
     }
-    
+
     pub fn hex_rgba(&self) -> String {
-        format!("#{:02X}{:02X}{:02X}{:02X}", self.r(), self.g(), self.b(), self.a())
+        format!(
+            "#{:02X}{:02X}{:02X}{:02X}",
+            self.r(),
+            self.g(),
+            self.b(),
+            self.a()
+        )
     }
 }
 
@@ -63,10 +69,8 @@ impl From<u8> for Color {
 
 impl From<u32> for Color {
     fn from(value: u32) -> Self {
-        let combined = (value & 0xFF000000)
-            | (value & 0x00FF0000)
-            | (value & 0x0000FF00)
-            | (value & 0xFF);
+        let combined =
+            (value & 0xFF000000) | (value & 0x00FF0000) | (value & 0x0000FF00) | (value & 0xFF);
 
         Self(combined)
     }
@@ -75,10 +79,8 @@ impl From<u32> for Color {
 impl From<i32> for Color {
     fn from(value: i32) -> Self {
         let value = value as u32;
-        let combined = (value & 0xFF000000)
-            | (value & 0x00FF0000)
-            | (value & 0x0000FF00)
-            | (value & 0xFF);
+        let combined =
+            (value & 0xFF000000) | (value & 0x00FF0000) | (value & 0x0000FF00) | (value & 0xFF);
 
         Self(combined)
     }
@@ -144,7 +146,7 @@ mod tests {
         assert_eq!(c.b(), t);
         assert_eq!(c.a(), t);
     }
-    
+
     #[test]
     fn from_u32() {
         let c: Color = 0xABCDEF22_u32.into();
@@ -153,13 +155,13 @@ mod tests {
         assert_eq!(c.b(), 0xEF);
         assert_eq!(c.a(), 0x22);
     }
-    
+
     #[test]
     fn get_hex_rgb() {
         let c: Color = 0xABFFCD00_u32.into();
         assert_eq!(c.hex_rgb(), "#ABFFCD")
     }
-    
+
     #[test]
     fn get_hex_rgba() {
         let c: Color = 0xABFFCD44_u32.into();

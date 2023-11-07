@@ -104,7 +104,7 @@ impl Palette {
     pub fn c6(&self) -> Color {
         self.c6
     }
-    
+
     pub fn c7(&self) -> Color {
         self.c7
     }
@@ -116,7 +116,7 @@ impl Palette {
     pub fn c9(&self) -> Color {
         self.c9
     }
-    
+
     pub fn c10(&self) -> Color {
         self.c10
     }

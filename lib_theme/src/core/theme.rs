@@ -12,7 +12,7 @@ impl Theme {
     pub fn new(name: String, palette: Palette) -> Self {
         Self { name, palette }
     }
-    
+
     pub fn palette(&self) -> Palette {
         self.palette
     }
