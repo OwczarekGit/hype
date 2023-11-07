@@ -1,3 +1,4 @@
+pub mod rose_pine_moon;
 pub mod solarized_dark;
 pub mod solarized_light;
 
@@ -24,10 +25,9 @@ macro_rules! define_theme {
         $c14:expr,
         $c15:expr,
     ) => {
-
         pub fn theme() -> crate::core::theme::Theme {
-            use crate::core::theme::Theme;
             use crate::core::palette::Palette;
+            use crate::core::theme::Theme;
             use std::sync::OnceLock;
 
             static THEME: OnceLock<Theme> = OnceLock::new();

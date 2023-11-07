@@ -14,31 +14,29 @@ impl Themeable for Alacritty {
 
     fn content(&self, theme: Theme) -> String {
         format!(
-            r#"
-        # Remember to import this file in your alacritty.yml
-        colors:
-            primary:
-                background: '{}'
-                foreground: '{}'
-            normal:
-                black: '{}'
-                red: '{}'
-                green: '{}'
-                yellow: '{}'
-                blue: '{}'
-                magenta: '{}'
-                cyan: '{}'
-                white: '{}'
-            bright:
-                black: '{}'
-                red: '{}'
-                green: '{}'
-                yellow: '{}'
-                blue: '{}'
-                magenta: '{}'
-                cyan: '{}'
-                white: '{}'
-        "#,
+            r#"# Remember to import this file in your alacritty.yml
+colors:
+    primary:
+        background: '{}'
+        foreground: '{}'
+    normal:
+        black: '{}'
+        red: '{}'
+        green: '{}'
+        yellow: '{}'
+        blue: '{}'
+        magenta: '{}'
+        cyan: '{}'
+        white: '{}'
+    bright:
+        black: '{}'
+        red: '{}'
+        green: '{}'
+        yellow: '{}'
+        blue: '{}'
+        magenta: '{}'
+        cyan: '{}'
+        white: '{}'"#,
             theme.palette().bg().hex_rgb(),
             theme.palette().fg().hex_rgb(),
             theme.palette().bg().hex_rgb(),
