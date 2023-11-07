@@ -1,3 +1,5 @@
+use core::panic;
+
 use serde::{Deserialize, Serialize};
 
 #[repr(C)]
@@ -86,6 +88,20 @@ impl From<i32> for Color {
     }
 }
 
+impl From<&str> for Color {
+    fn from(value: &str) -> Self {
+        let mut v = value.replace('#', "");
+        
+        match v.len() {
+            8 => {}
+            6 => v += "00",
+            _ => panic!("Invalid hex string '{}'.", v),
+        };
+        
+        u32::from_str_radix(&v, 16).expect("Invalid hex code").into()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -166,5 +182,41 @@ mod tests {
     fn get_hex_rgba() {
         let c: Color = 0xABFFCD44_u32.into();
         assert_eq!(c.hex_rgba(), "#ABFFCD44")
+    }
+    
+    #[test]
+    fn from_string_with_hash_in_front() {
+        let c: Color = "#ABCDEF".into();
+        assert_eq!(c.r(), 0xAB);
+        assert_eq!(c.g(), 0xCD);
+        assert_eq!(c.b(), 0xEF);
+        assert_eq!(c.a(), 0x00);
+    }
+    
+    #[test]
+    fn from_string_with_hash_in_front_with_alpha() {
+        let c: Color = "#ABCDEF44".into();
+        assert_eq!(c.r(), 0xAB);
+        assert_eq!(c.g(), 0xCD);
+        assert_eq!(c.b(), 0xEF);
+        assert_eq!(c.a(), 0x44);
+    }
+    
+    #[test]
+    fn from_string_without_hash_in_front() {
+        let c: Color = "FDAACC".into();
+        assert_eq!(c.r(), 0xFD);
+        assert_eq!(c.g(), 0xAA);
+        assert_eq!(c.b(), 0xCC);
+        assert_eq!(c.a(), 0x00);
+    }
+    
+    #[test]
+    fn from_string_without_hash_in_front_with_alpha() {
+        let c: Color = "FDAACC22".into();
+        assert_eq!(c.r(), 0xFD);
+        assert_eq!(c.g(), 0xAA);
+        assert_eq!(c.b(), 0xCC);
+        assert_eq!(c.a(), 0x22);
     }
 }
