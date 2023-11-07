@@ -41,7 +41,7 @@ impl Color {
 impl From<(u8, u8, u8)> for Color {
     fn from(value: (u8, u8, u8)) -> Self {
         let combined =
-            ((value.0 as u32) << 24) | ((value.1 as u32) << 16) | ((value.2 as u32) << 8);
+            ((value.0 as u32) << 24) | ((value.1 as u32) << 16) | ((value.2 as u32) << 8) | 0xFF;
 
         Self(combined)
     }
@@ -94,7 +94,7 @@ impl From<&str> for Color {
         
         match v.len() {
             8 => {}
-            6 => v += "00",
+            6 => v += "FF",
             _ => panic!("Invalid hex string '{}'.", v),
         };
         
@@ -138,7 +138,7 @@ mod tests {
         assert_eq!(c.r(), t.0);
         assert_eq!(c.g(), t.1);
         assert_eq!(c.b(), t.2);
-        assert_eq!(c.a(), 0);
+        assert_eq!(c.a(), 255);
     }
 
     #[test]
@@ -190,7 +190,7 @@ mod tests {
         assert_eq!(c.r(), 0xAB);
         assert_eq!(c.g(), 0xCD);
         assert_eq!(c.b(), 0xEF);
-        assert_eq!(c.a(), 0x00);
+        assert_eq!(c.a(), 0xFF);
     }
     
     #[test]
@@ -208,7 +208,7 @@ mod tests {
         assert_eq!(c.r(), 0xFD);
         assert_eq!(c.g(), 0xAA);
         assert_eq!(c.b(), 0xCC);
-        assert_eq!(c.a(), 0x00);
+        assert_eq!(c.a(), 0xFF);
     }
     
     #[test]

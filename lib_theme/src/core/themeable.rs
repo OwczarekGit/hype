@@ -1,6 +1,5 @@
 use std::io::Write;
 use std::path::PathBuf;
-
 use super::theme::Theme;
 
 pub trait Themeable {
