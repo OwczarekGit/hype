@@ -1,7 +1,8 @@
-use crate::define_theme;
+use crate::{define_theme, core::theme::Variant};
 
 define_theme!(
     "Rose Pine Moon",
+    Variant::Dark,
     "#232136",
     "#E0DEF4",
     "#393552",

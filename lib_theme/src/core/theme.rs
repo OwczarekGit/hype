@@ -5,12 +5,25 @@ use super::palette::Palette;
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct Theme {
     name: String,
+    variant: Variant,
     palette: Palette,
 }
 
+#[derive(Serialize, Deserialize, Clone, Copy, Debug)]
+pub enum Variant {
+    Dark,
+    Light,
+}
+
+impl Default for Variant {
+    fn default() -> Self {
+        Self::Dark
+    }
+}
+
 impl Theme {
-    pub fn new(name: String, palette: Palette) -> Self {
-        Self { name, palette }
+    pub fn new(name: String, variant: Variant, palette: Palette) -> Self {
+        Self { name, variant, palette }
     }
 
     pub fn palette(&self) -> Palette {
