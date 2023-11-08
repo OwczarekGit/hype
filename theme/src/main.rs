@@ -7,4 +7,5 @@ fn main() {
     programs::wofi::Wofi.apply(&theme);
     programs::hyprland::Hyprland.apply(&theme);
     programs::waybar::Waybar.apply(&theme);
+    programs::swaylock::Swaylock.apply(&theme);
 }

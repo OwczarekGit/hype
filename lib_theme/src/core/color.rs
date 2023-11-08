@@ -22,6 +22,10 @@ impl Color {
     pub fn a(&self) -> u8 {
         self.0 as u8
     }
+    
+    pub fn raw_hex_rgb(&self) -> String {
+        format!("{:02X}{:02X}{:02X}", self.r(), self.g(), self.b())
+    }
 
     pub fn hex_rgb(&self) -> String {
         format!("#{:02X}{:02X}{:02X}", self.r(), self.g(), self.b())

@@ -1,6 +1,6 @@
-use std::path::PathBuf;
-use lib_theme::core::themeable::Themeable;
 use super::config_directory;
+use lib_theme::core::themeable::Themeable;
+use std::path::PathBuf;
 
 pub struct Alacritty;
 
