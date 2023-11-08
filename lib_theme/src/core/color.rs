@@ -36,6 +36,10 @@ impl Color {
             self.a()
         )
     }
+    
+    pub fn hyprland_rgba(&self) -> String {
+        format!("rgba({:02X}{:02X}{:02X}{:02X})", self.r(), self.g(), self.b(), self.a())
+    }
 }
 
 impl From<(u8, u8, u8)> for Color {
