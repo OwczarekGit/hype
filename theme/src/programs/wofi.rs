@@ -10,7 +10,7 @@ impl Themeable for Wofi {
         PathBuf::from(config_directory() + "/wofi/theme.css")
     }
 
-    fn content(&self, theme: lib_theme::core::theme::Theme) -> String {
+    fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
         theme.css_definitions()
     }
 }

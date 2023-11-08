@@ -11,7 +11,7 @@ impl Themeable for Waybar {
         PathBuf::from(config_directory() + "/waybar/theme.css")
     }
 
-    fn content(&self, theme: lib_theme::core::theme::Theme) -> String {
+    fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
         theme.css_definitions()
     }
     

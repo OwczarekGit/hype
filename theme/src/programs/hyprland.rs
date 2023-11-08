@@ -11,7 +11,7 @@ impl Themeable for Hyprland {
         PathBuf::from(config_directory() + "/hypr/theme.conf")
     }
 
-    fn content(&self, theme: lib_theme::core::theme::Theme) -> String {
+    fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
         format!(
             r#"## Remember to source this file in your hyprland.conf
 $bg = {}

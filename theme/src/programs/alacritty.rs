@@ -1,9 +1,5 @@
 use std::path::PathBuf;
-
-use lib_theme::core::theme::Theme;
-
 use lib_theme::core::themeable::Themeable;
-
 use super::config_directory;
 
 pub struct Alacritty;
@@ -13,7 +9,7 @@ impl Themeable for Alacritty {
         PathBuf::from(config_directory() + "/alacritty/theme.yml")
     }
 
-    fn content(&self, theme: Theme) -> String {
+    fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
         format!(
             r#"# Remember to import this file in your alacritty.yml
 colors:
