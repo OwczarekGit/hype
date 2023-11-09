@@ -1,6 +1,6 @@
-use rand::{seq::SliceRandom};
+use rand::seq::SliceRandom;
 use serde::{Deserialize, Serialize};
-use std::{process::Stdio, io::Write, path::PathBuf};
+use std::{process::Stdio, io::Write, path::{PathBuf, Path}};
 
 use crate::{hyprpaper_config, Variant};
 
@@ -43,13 +43,13 @@ impl ConfigFile {
     pub fn random_dark(&self) -> Option<PathBuf> {
         let mut rng = rand::thread_rng();
         let walls = self.get_dark().ok()?;
-        walls.choose(&mut rng).clone().cloned()
+        walls.choose(&mut rng).cloned()
     }
 
     pub fn random_light(&self) -> Option<PathBuf> {
         let mut rng = rand::thread_rng();
         let walls = self.get_light().ok()?;
-        walls.choose(&mut rng).clone().cloned()
+        walls.choose(&mut rng).cloned()
     }
     
     pub fn set_wallpaper(&self, path: &PathBuf) {
@@ -63,7 +63,7 @@ impl ConfigFile {
         let _ = std::process::Command::new("hyprctl")
             .arg("hyprpaper")
             .arg("preload")
-            .arg(&path)
+            .arg(path)
             .stdout(Stdio::null())
             .spawn();
         
@@ -79,7 +79,7 @@ impl ConfigFile {
             });
     }
     
-    pub fn save_wallpaper(&self, path: &PathBuf) {
+    pub fn save_wallpaper(&self, path: &Path) {
         let cfg = hyprpaper_config();        
         let mut file = std::fs::File::create(cfg).unwrap();
         let mut content = String::new();
@@ -92,7 +92,7 @@ impl ConfigFile {
         let _ = file.write_all(content.as_bytes());
     }
     
-    pub fn find_by_name(&self, variant: Variant, path: &PathBuf) -> Option<PathBuf> {
+    pub fn find_by_name(&self, variant: Variant, path: &Path) -> Option<PathBuf> {
         let walls = match variant {
             Variant::Dark => self.get_dark().ok(),
             Variant::Light => self.get_light().ok(),
