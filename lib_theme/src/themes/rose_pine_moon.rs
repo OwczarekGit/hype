@@ -1,4 +1,4 @@
-use crate::{define_theme, core::theme::Variant};
+use crate::{core::theme::Variant, define_theme};
 
 define_theme!(
     "Rose Pine Moon",

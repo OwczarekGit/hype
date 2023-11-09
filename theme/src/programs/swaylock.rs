@@ -26,17 +26,17 @@ inside-ver-color={}
 ring-ver-color={}
 inside-wrong-color={}
 ring-wrong-color={}"#,
-            p.bg().raw_hex_rgb(),
-            p.bg().raw_hex_rgb(),
-            p.c3().raw_hex_rgb(),
-            p.c1().raw_hex_rgb(),
-            p.c1().raw_hex_rgb(),
-            p.c2().raw_hex_rgb(),
-            p.c0().raw_hex_rgb(),
-            p.c4().raw_hex_rgb(),
-            p.c4().raw_hex_rgb(),
-            p.c1().raw_hex_rgb(),
-            p.c1().raw_hex_rgb(),
+            p.background().raw_hex_rgb(),
+            p.background().raw_hex_rgb(),
+            p.yellow().raw_hex_rgb(),
+            p.red().raw_hex_rgb(),
+            p.red().raw_hex_rgb(),
+            p.green().raw_hex_rgb(),
+            p.black().raw_hex_rgb(),
+            p.blue().raw_hex_rgb(),
+            p.blue().raw_hex_rgb(),
+            p.red().raw_hex_rgb(),
+            p.red().raw_hex_rgb(),
         )
     }
 }

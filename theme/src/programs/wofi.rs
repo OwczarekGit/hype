@@ -11,6 +11,6 @@ impl Themeable for Wofi {
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
-        theme.css_definitions()
+        theme.gtk_css_definitions()
     }
 }

@@ -1,12 +1,12 @@
 use serde::{Deserialize, Serialize};
 
-use super::palette::Palette;
+use super::terminal_colors::TerminalColors;
 
 #[derive(Serialize, Deserialize, Clone, Debug, Default)]
 pub struct Theme {
     name: String,
     variant: Variant,
-    palette: Palette,
+    palette: TerminalColors,
 }
 
 #[derive(Serialize, Deserialize, Clone, Copy, Debug)]
@@ -22,54 +22,58 @@ impl Default for Variant {
 }
 
 impl Theme {
-    pub fn new(name: String, variant: Variant, palette: Palette) -> Self {
-        Self { name, variant, palette }
+    pub fn new(name: String, variant: Variant, palette: TerminalColors) -> Self {
+        Self {
+            name,
+            variant,
+            palette,
+        }
     }
 
-    pub fn palette(&self) -> Palette {
+    pub fn palette(&self) -> TerminalColors {
         self.palette
     }
 
-    pub fn css_definitions(&self) -> String {
+    pub fn gtk_css_definitions(&self) -> String {
         let colors = self.palette();
         format!(
             r#"/* Remember to import this file in your style.css */
-@define-color bg {};
-@define-color fg {};
-@define-color c0 {};
-@define-color c1 {};
-@define-color c2 {};
-@define-color c3 {};
-@define-color c4 {};
-@define-color c5 {};
-@define-color c6 {};
-@define-color c7 {};
-@define-color c8 {};
-@define-color c9 {};
-@define-color c10 {};
-@define-color c11 {};
-@define-color c12 {};
-@define-color c13 {};
-@define-color c14 {};
-@define-color c15 {};"#,
-            colors.bg().hex_rgb(),
-            colors.fg().hex_rgb(),
-            colors.c0().hex_rgb(),
-            colors.c1().hex_rgb(),
-            colors.c2().hex_rgb(),
-            colors.c3().hex_rgb(),
-            colors.c4().hex_rgb(),
-            colors.c5().hex_rgb(),
-            colors.c6().hex_rgb(),
-            colors.c7().hex_rgb(),
-            colors.c8().hex_rgb(),
-            colors.c9().hex_rgb(),
-            colors.c10().hex_rgb(),
-            colors.c11().hex_rgb(),
-            colors.c12().hex_rgb(),
-            colors.c13().hex_rgb(),
-            colors.c14().hex_rgb(),
-            colors.c15().hex_rgb(),
+@define-color background {};
+@define-color foreground {};
+@define-color black {};
+@define-color red {};
+@define-color green {};
+@define-color yellow {};
+@define-color blue {};
+@define-color magenta {};
+@define-color cyan {};
+@define-color white {};
+@define-color bblack {};
+@define-color bred {};
+@define-color bgreen {};
+@define-color byellow {};
+@define-color bblue {};
+@define-color bmagenta {};
+@define-color bcyan {};
+@define-color bwhite {};"#,
+            colors.background().hex_rgb(),
+            colors.foreground().hex_rgb(),
+            colors.black().hex_rgb(),
+            colors.red().hex_rgb(),
+            colors.green().hex_rgb(),
+            colors.yellow().hex_rgb(),
+            colors.blue().hex_rgb(),
+            colors.magenta().hex_rgb(),
+            colors.cyan().hex_rgb(),
+            colors.white().hex_rgb(),
+            colors.bright_black().hex_rgb(),
+            colors.bright_red().hex_rgb(),
+            colors.bright_green().hex_rgb(),
+            colors.bright_yellow().hex_rgb(),
+            colors.bright_blue().hex_rgb(),
+            colors.bright_magenta().hex_rgb(),
+            colors.bright_cyan().hex_rgb(),
+            colors.bright_white().hex_rgb(),
         )
     }
 }

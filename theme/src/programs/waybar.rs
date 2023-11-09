@@ -12,7 +12,7 @@ impl Themeable for Waybar {
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
-        theme.css_definitions()
+        theme.gtk_css_definitions()
     }
 
     fn run_post_apply_action(&self) {

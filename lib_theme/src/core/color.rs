@@ -22,7 +22,7 @@ impl Color {
     pub fn a(&self) -> u8 {
         self.0 as u8
     }
-    
+
     pub fn raw_hex_rgb(&self) -> String {
         format!("{:02X}{:02X}{:02X}", self.r(), self.g(), self.b())
     }
@@ -40,9 +40,15 @@ impl Color {
             self.a()
         )
     }
-    
+
     pub fn hyprland_rgba(&self) -> String {
-        format!("rgba({:02X}{:02X}{:02X}{:02X})", self.r(), self.g(), self.b(), self.a())
+        format!(
+            "rgba({:02X}{:02X}{:02X}{:02X})",
+            self.r(),
+            self.g(),
+            self.b(),
+            self.a()
+        )
     }
 }
 
@@ -99,14 +105,16 @@ impl From<i32> for Color {
 impl From<&str> for Color {
     fn from(value: &str) -> Self {
         let mut v = value.replace('#', "");
-        
+
         match v.len() {
             8 => {}
             6 => v += "FF",
             _ => panic!("Invalid hex string '{}'.", v),
         };
-        
-        u32::from_str_radix(&v, 16).expect("Invalid hex code").into()
+
+        u32::from_str_radix(&v, 16)
+            .expect("Invalid hex code")
+            .into()
     }
 }
 
@@ -191,7 +199,7 @@ mod tests {
         let c: Color = 0xABFFCD44_u32.into();
         assert_eq!(c.hex_rgba(), "#ABFFCD44")
     }
-    
+
     #[test]
     fn from_string_with_hash_in_front() {
         let c: Color = "#ABCDEF".into();
@@ -200,7 +208,7 @@ mod tests {
         assert_eq!(c.b(), 0xEF);
         assert_eq!(c.a(), 0xFF);
     }
-    
+
     #[test]
     fn from_string_with_hash_in_front_with_alpha() {
         let c: Color = "#ABCDEF44".into();
@@ -209,7 +217,7 @@ mod tests {
         assert_eq!(c.b(), 0xEF);
         assert_eq!(c.a(), 0x44);
     }
-    
+
     #[test]
     fn from_string_without_hash_in_front() {
         let c: Color = "FDAACC".into();
@@ -218,7 +226,7 @@ mod tests {
         assert_eq!(c.b(), 0xCC);
         assert_eq!(c.a(), 0xFF);
     }
-    
+
     #[test]
     fn from_string_without_hash_in_front_with_alpha() {
         let c: Color = "FDAACC22".into();

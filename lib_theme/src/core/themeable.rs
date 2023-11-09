@@ -1,6 +1,6 @@
+use super::theme::Theme;
 use std::io::Write;
 use std::path::PathBuf;
-use super::theme::Theme;
 
 pub trait Themeable {
     fn path(&self) -> PathBuf;
