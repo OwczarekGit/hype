@@ -22,8 +22,23 @@ pub enum Command {
 #[derive(Serialize, Deserialize, Debug, Clone, Subcommand)]
 pub enum CollectionCommand {
     Show,
-    List { name: String },
-    Create { name: String },
-    Add { collection: String, file: PathBuf },
-    Set { collection: String, file: PathBuf },
+    List {
+        name: String,
+    },
+    Create {
+        name: String,
+    },
+    Add {
+        collection: String,
+        file: Vec<PathBuf>,
+    },
+    Set {
+        collection: String,
+        file: PathBuf,
+    },
+    Random {
+        collection: String,
+        #[arg(short)]
+        save: bool,
+    }
 }

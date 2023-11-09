@@ -1,25 +1,14 @@
+use serde::{Deserialize, Serialize};
 use std::io::Write;
 use std::path::{Path, PathBuf};
 use std::process::Stdio;
 
-pub struct Hyprpaper {
-    monitors: Vec<String>,
-}
-
-impl Default for Hyprpaper {
-    fn default() -> Self {
-        Self {
-            monitors: vec![
-                "DP-1".to_string(),
-                "DP-2".to_string(),
-                "HDMI-A-1".to_string(),
-            ],
-        }
-    }
-}
+pub struct Hyprpaper;
 
 impl Hyprpaper {
     pub fn set_wallpaper(&self, path: &PathBuf) {
+        let monitors = Self::get_monitors();
+
         let _ = std::process::Command::new("hyprctl")
             .arg("hyprpaper")
             .arg("unload")
@@ -34,7 +23,7 @@ impl Hyprpaper {
             .stdout(Stdio::null())
             .spawn();
 
-        self.monitors.iter().for_each(|mon| {
+        monitors.iter().for_each(|mon| {
             let _ = std::process::Command::new("hyprctl")
                 .arg("hyprpaper")
                 .arg("wallpaper")
@@ -44,13 +33,30 @@ impl Hyprpaper {
         });
     }
 
+    fn get_monitors() -> Vec<String> {
+        let monitors = String::from_utf8(
+            std::process::Command::new("hyprctl")
+                .arg("monitors")
+                .arg("-j")
+                .output()
+                .expect("'hyprctl monitors' failed.")
+                .stdout,
+        )
+        .expect("Invalid format.");
+
+        let monitors: Vec<HyprctlMonitor> =
+            serde_json::from_str(&monitors).expect("Invalid format.");
+
+        monitors.into_iter().map(|n| n.name).collect::<Vec<_>>()
+    }
+
     pub fn save_wallpaper(&self, path: &Path) {
         let cfg = hyprpaper_config();
         let mut file = std::fs::File::create(cfg).unwrap();
         let mut content = String::new();
         content.push_str(format!("preload = {}\n", path.display()).as_str());
 
-        self.monitors.iter().for_each(|mon| {
+        Self::get_monitors().iter().for_each(|mon| {
             content.push_str(format!("wallpaper = {mon}, {}\n", path.display()).as_str())
         });
 
@@ -61,4 +67,43 @@ impl Hyprpaper {
 fn hyprpaper_config() -> PathBuf {
     let home = env!("HOME").to_string();
     PathBuf::from(home + "/.config/hypr/hyprpaper.conf")
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct HyprctlMonitor {
+    pub id: i64,
+    pub name: String,
+    pub description: String,
+    pub make: String,
+    pub model: String,
+    pub serial: String,
+    pub width: i64,
+    pub height: i64,
+    pub refresh_rate: f64,
+    pub x: i64,
+    pub y: i64,
+    pub active_workspace: ActiveWorkspace,
+    pub special_workspace: SpecialWorkspace,
+    pub reserved: Vec<i64>,
+    pub scale: f64,
+    pub transform: i64,
+    pub focused: bool,
+    pub dpms_status: bool,
+    pub vrr: bool,
+    pub actively_tearing: bool,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ActiveWorkspace {
+    pub id: i64,
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct SpecialWorkspace {
+    pub id: i64,
+    pub name: String,
 }

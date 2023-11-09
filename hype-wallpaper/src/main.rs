@@ -43,7 +43,7 @@ fn main() -> Result<(), String> {
     };
 
     let mut col = Collection::from_file(&config)?;
-    let hyprpaper = Hyprpaper::default();
+    let hyprpaper = Hyprpaper;
 
     match args.command {
         arguments::Command::Collection { collection_command } => match collection_command {
@@ -65,19 +65,23 @@ fn main() -> Result<(), String> {
                 }
             }
             arguments::CollectionCommand::Add { collection, file } => {
-                col.add_to_collection(&collection, &file);
+                col.add_to_collection(&collection, file.clone());
 
                 if col.save(&config).is_ok() {
-                    println!(
-                        "{file} has been added to {collection}.",
-                        file = file.display()
-                    );
+                    println!("{} files has been added to {collection}.", file.len());
                 }
             }
             arguments::CollectionCommand::Set { collection, file } => {
                 let path = col.set_wallpaper(&collection, &file)?;
                 hyprpaper.set_wallpaper(&path);
                 hyprpaper.save_wallpaper(&path);
+            }
+            arguments::CollectionCommand::Random { collection, save } => {
+                let wall = col.random_from_collection(&collection)?;
+                hyprpaper.set_wallpaper(&wall);
+                if save {
+                    hyprpaper.save_wallpaper(&wall);
+                }
             }
         },
     }

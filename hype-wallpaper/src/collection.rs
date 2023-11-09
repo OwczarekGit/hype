@@ -1,3 +1,5 @@
+use rand::seq::IteratorRandom;
+use rand::thread_rng;
 use serde::{Deserialize, Serialize};
 use std::collections::hash_map::Entry;
 use std::{
@@ -27,6 +29,14 @@ impl Collection {
             .cloned()
             .ok_or(CollectionError::ItemInCollectionNotFound)
     }
+    
+    pub fn random_from_collection(&self, collection: &str) -> Result<PathBuf, CollectionError> {
+        let col = self.collections.get(collection)
+            .ok_or(CollectionError::CollectionNotFound)?;
+        
+        let mut rng = thread_rng();
+        Ok(col.iter().choose(&mut rng).ok_or(CollectionError::ItemInCollectionNotFound)?.clone())
+    }
 }
 
 impl Collection {
@@ -39,13 +49,13 @@ impl Collection {
         };
     }
 
-    pub fn add_to_collection(&mut self, name: &str, path: &Path) {
+    pub fn add_to_collection(&mut self, name: &str, paths: Vec<PathBuf>) {
         match self.collections.entry(name.to_string()) {
             Entry::Occupied(vec) => {
-                vec.into_mut().insert(path.to_path_buf());
+                vec.into_mut().extend(paths);
             }
             Entry::Vacant(entry) => {
-                entry.insert(HashSet::from([path.to_path_buf()]));
+                entry.insert(HashSet::from_iter(paths));
             }
         };
     }
