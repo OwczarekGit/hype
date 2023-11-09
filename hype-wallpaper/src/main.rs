@@ -1,106 +1,86 @@
+mod arguments;
+mod collection;
+mod hyprpaper;
+
+use arguments::Arguments;
+use clap::Parser;
+use collection::Collection;
+use hyprpaper::Hyprpaper;
 use std::path::PathBuf;
 
-use clap::{Parser, ValueEnum, Subcommand};
-use config_file::ConfigFile;
+fn default_config_directory() -> PathBuf {
+    let home = env!("HOME");
+    PathBuf::from(format!("{home}/.config/hype/wallpaper"))
+}
 
-mod config_file;
+fn default_config_file() -> PathBuf {
+    let mut dir = default_config_directory();
+    dir.push("config.toml");
+    dir
+}
 
 fn main() -> Result<(), String> {
-    let args = Config::parse();
+    let args = Arguments::parse();
 
-    let config_dir = config_directory();
-    let _ = std::fs::create_dir_all(&config_dir);
-    let mut config_file = config_dir.clone();
-    config_file.push("config.toml");
+    let config = match args.config {
+        None => {
+            let file = default_config_file();
+            if std::path::Path::exists(&file) {
+                file
+            } else {
+                let default_dir = default_config_directory();
+                std::fs::create_dir_all(default_dir)
+                    .map_err(|_| "Could not create default config directory.")?;
 
-    let Some(cfg) = read_config(config_file.clone()) else {
-        return Err(format!(
-            "Config file invalid or not found in: '{}'",
-            config_file.display()
-        ));
-    };
-    
-    match args.command {
-        Command::Random { variant, save } => {
-            let wall = match variant {
-                Variant::Dark => cfg.random_dark(),
-                Variant::Light => cfg.random_light()
-            }.ok_or("No wallpapers found.".to_string())?;
-            cfg.set_wallpaper(&wall);
-            if save {
-                cfg.save_wallpaper(&wall);
+                let col = Collection::default();
+                col.save(&file)
+                    .map_err(|_| "Could not save default config file.")?;
+
+                file
             }
-        },
-        Command::List{variant} => {
-            let walls = match variant {
-                Variant::Dark => cfg.get_dark().ok(),
-                Variant::Light => cfg.get_light().ok(),
-            }.ok_or("No wallpapers found.")?;
-            walls
-                .iter()
-                .filter_map(|w| w.file_name())
-                .for_each(|w| println!("{}", w.to_str().unwrap_or("")) );
         }
-        Command::Set { variant, path , save } => {
-            match cfg.find_by_name(variant, &path) {
-                Some(path) => {
-                    cfg.set_wallpaper(&path);
-                    if save {
-                        cfg.save_wallpaper(&path);
+        Some(ref cfg) => cfg.to_owned(),
+    };
+
+    let mut col = Collection::from_file(&config)?;
+    let hyprpaper = Hyprpaper::default();
+
+    match args.command {
+        arguments::Command::Collection { collection_command } => match collection_command {
+            arguments::CollectionCommand::Show => {
+                col.get_collections().iter().for_each(|c| println!("{c}"));
+            }
+            arguments::CollectionCommand::List { name } => {
+                match col.list_items_in_collection(&name) {
+                    None => println!("Collection {name} not found."),
+                    Some(entries) => {
+                        entries.iter().for_each(|e| println!("{e}"));
                     }
-                },
-                None => {
-                    println!("Wallpaper not found: '{}'", path.display())
                 }
             }
-        }
+            arguments::CollectionCommand::Create { name } => {
+                col.create_collection(&name);
+                if col.save(&config).is_ok() {
+                    println!("Collection {name} created.");
+                }
+            }
+            arguments::CollectionCommand::Add { collection, file } => {
+                col.add_to_collection(&collection, &file);
+
+                if col.save(&config).is_ok() {
+                    println!(
+                        "{file} has been added to {collection}.",
+                        file = file.display()
+                    );
+                }
+            }
+            arguments::CollectionCommand::Set { collection, file } => {
+                let path = col.set_wallpaper(&collection, &file)?;
+                hyprpaper.set_wallpaper(&path);
+                hyprpaper.save_wallpaper(&path);
+            }
+        },
     }
-    
+
     Ok(())
 }
-
-#[derive(Parser, Debug)]
-pub struct Config {
-    #[command(subcommand)]
-    command: Command,
-}
-
-#[derive(Debug, Clone, ValueEnum, Subcommand)]
-pub enum Variant {
-    Dark,
-    Light,
-}
-
-#[derive(Subcommand, Debug, Clone)]
-pub enum Command {
-    Random{
-        variant: Variant,
-        #[arg(short, long, default_value_t = false)]
-        save: bool,
-    },
-    List{
-        variant: Variant
-    },
-    Set{
-        variant: Variant,
-        path: PathBuf,
-        #[arg(short, long, default_value_t = false)]
-        save: bool,
-    },
-}
-
-fn config_directory() -> PathBuf {
-    let home = env!("HOME").to_owned();
-    PathBuf::from(home + "/.config/hype/wallpaper")
-}
-
-fn hyprpaper_config() -> PathBuf {
-    let home = env!("HOME").to_owned();
-    PathBuf::from(home + "/.config/hypr/hyprpaper.conf")
-}
-
-fn read_config(path: PathBuf) -> Option<ConfigFile> {
-    let content = std::fs::read_to_string(path).ok()?;
-    toml::from_str(&content).ok()
-}
-
