@@ -62,7 +62,7 @@ impl Collection {
                     paths
                         .iter()
                         .filter_map(|p| p.canonicalize().ok())
-                        .collect::<Vec<_>>()
+                        .collect::<Vec<_>>(),
                 );
             }
             Entry::Vacant(entry) => {
@@ -70,9 +70,8 @@ impl Collection {
                     paths
                         .iter()
                         .filter_map(|p| p.canonicalize().ok())
-                        .collect::<Vec<_>>()
-                    )
-                );
+                        .collect::<Vec<_>>(),
+                ));
             }
         };
     }
