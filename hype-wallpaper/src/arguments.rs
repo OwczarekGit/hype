@@ -17,6 +17,23 @@ pub enum Command {
         #[clap(subcommand)]
         collection_command: CollectionCommand,
     },
+    Wallpaper {
+        #[clap(subcommand)]
+        wallpaper_command: WallpaperCommand,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Subcommand)]
+pub enum WallpaperCommand {
+    Set {
+        collection: String,
+        file: PathBuf,
+    },
+    Random {
+        collection: String,
+        #[arg(short)]
+        save: bool,
+    },
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Subcommand)]
@@ -32,13 +49,4 @@ pub enum CollectionCommand {
         collection: String,
         file: Vec<PathBuf>,
     },
-    Set {
-        collection: String,
-        file: PathBuf,
-    },
-    Random {
-        collection: String,
-        #[arg(short)]
-        save: bool,
-    }
 }

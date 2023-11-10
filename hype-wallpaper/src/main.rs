@@ -71,12 +71,14 @@ fn main() -> Result<(), String> {
                     println!("{} files has been added to {collection}.", file.len());
                 }
             }
-            arguments::CollectionCommand::Set { collection, file } => {
+        },
+        arguments::Command::Wallpaper { wallpaper_command } => match wallpaper_command {
+            arguments::WallpaperCommand::Set { collection, file } => {
                 let path = col.set_wallpaper(&collection, &file)?;
                 hyprpaper.set_wallpaper(&path);
                 hyprpaper.save_wallpaper(&path);
             }
-            arguments::CollectionCommand::Random { collection, save } => {
+            arguments::WallpaperCommand::Random { collection, save } => {
                 let wall = col.random_from_collection(&collection)?;
                 hyprpaper.set_wallpaper(&wall);
                 if save {

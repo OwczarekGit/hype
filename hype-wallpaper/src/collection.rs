@@ -29,13 +29,19 @@ impl Collection {
             .cloned()
             .ok_or(CollectionError::ItemInCollectionNotFound)
     }
-    
+
     pub fn random_from_collection(&self, collection: &str) -> Result<PathBuf, CollectionError> {
-        let col = self.collections.get(collection)
+        let col = self
+            .collections
+            .get(collection)
             .ok_or(CollectionError::CollectionNotFound)?;
-        
+
         let mut rng = thread_rng();
-        Ok(col.iter().choose(&mut rng).ok_or(CollectionError::ItemInCollectionNotFound)?.clone())
+        Ok(col
+            .iter()
+            .choose(&mut rng)
+            .ok_or(CollectionError::ItemInCollectionNotFound)?
+            .clone())
     }
 }
 
