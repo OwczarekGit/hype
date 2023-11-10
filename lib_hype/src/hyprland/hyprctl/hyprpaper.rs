@@ -37,10 +37,9 @@ impl Hyprpaper {
                 .spawn();
         });
     }
-    
+
     pub fn set_wallpaper(path: &Path) {
-        let monitors = Monitor::get_all()
-            .expect("The list of monitors.");
+        let monitors = Monitor::get_all().expect("The list of monitors.");
         Self::unload_all();
         Self::preload(path);
         Self::wallpaper(&monitors, path);

@@ -8,4 +8,5 @@ fn main() {
     programs::hyprland::Hyprland.apply(&theme);
     programs::waybar::Waybar.apply(&theme);
     programs::swaylock::Swaylock.apply(&theme);
+    programs::mako::Mako.apply(&theme);
 }
