@@ -15,7 +15,7 @@ impl Slurp {
         )
         .map_err(|_| SlurpError::InvalidEncoding)?;
 
-        Ok(Rectangle::from_str(&x).map_err(|_| SlurpError::InvalidSlurpRectangle)?)
+        Rectangle::from_str(&x).map_err(|_| SlurpError::InvalidSlurpRectangle)
     }
 
     pub fn select_point(&self) -> Result<Rectangle, SlurpError> {
@@ -30,10 +30,11 @@ impl Slurp {
         )
         .map_err(|_| SlurpError::InvalidEncoding)?;
 
-        Ok(Rectangle::from_str(&x).map_err(|_| SlurpError::InvalidSlurpRectangle)?)
+        Rectangle::from_str(&x).map_err(|_| SlurpError::InvalidSlurpRectangle)
     }
 }
 
+#[derive(Debug, Clone)]
 pub enum SlurpError {
     InvalidEncoding,
     InvalidFormat,

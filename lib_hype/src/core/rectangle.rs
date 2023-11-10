@@ -31,11 +31,17 @@ impl From<Client> for Rectangle {
     }
 }
 
+impl From<Rectangle> for (i64,i64,i64,i64) {
+    fn from(v: Rectangle) -> Self {
+        (v.0, v.1, v.2, v.3)
+    }
+}
+
 impl FromStr for Rectangle {
     type Err = ();
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let mut split = s.split(" ");
+        let mut split = s.split(' ');
         let p1 = split.next().ok_or(())?;
         let p2 = split.next().ok_or(())?;
         let p3 = split.next().ok_or(())?;

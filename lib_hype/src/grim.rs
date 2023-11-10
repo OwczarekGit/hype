@@ -8,14 +8,13 @@ impl Grim {
         output: &Path,
     ) -> Result<(), std::io::Error> {
         let rect = rect.into();
-        let path = output.canonicalize()?;
 
         std::process::Command::new("grim")
             .arg("-g")
             .arg(format!("{},{} {}x{}", rect.0, rect.1, rect.2, rect.3))
-            .arg(path)
+            .arg(output)
             .spawn()?;
-
+        
         Ok(())
     }
 }
