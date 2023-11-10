@@ -3,8 +3,7 @@ use std::path::PathBuf;
 use arguments::Arguments;
 use chrono::{Datelike, Local, Timelike};
 use clap::Parser;
-use lib_hype::{slurp::Slurp, grim::Grim};
-
+use lib_hype::core::{screenshot::{grim::Grim, slurp::Slurp}, notification::{Notification, Urgency}};
 mod arguments;
 
 fn main() {
@@ -16,7 +15,13 @@ fn main() {
             let path = resolve_output_path(output);
             let rect = slurp.select_rectangle().expect("Rectangle to be selected");
             if !rect.is_zero_size() {
-                let _ = Grim::screenshot_rect(rect, &path);
+                if Grim::screenshot_rect(rect, &path).is_ok() {
+                    Notification::send(
+                        "Screenshot saved",
+                        path.to_str().unwrap(),
+                        Urgency::Low
+                    );
+                }
             }
         }
         arguments::Command::Screenshot { output } => todo!(),
