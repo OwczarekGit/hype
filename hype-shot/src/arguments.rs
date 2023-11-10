@@ -10,6 +10,6 @@ pub struct Arguments {
 
 #[derive(Debug, Clone, Subcommand)]
 pub enum Command {
-    Screenshot { output: Option<PathBuf> },
-    ScreenshotRect { output: Option<PathBuf> },
+    Monitor { output: Option<PathBuf> },
+    Selection { output: Option<PathBuf> },
 }

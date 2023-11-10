@@ -1,5 +1,7 @@
 use serde::{Deserialize, Serialize};
 
+use crate::core::rectangle::Rectangle;
+
 use super::HyprctlError;
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -51,5 +53,9 @@ impl Monitor {
 
         let out = String::from_utf8(out)?;
         Ok(serde_json::from_str::<'_, Vec<Monitor>>(&out)?)
+    }
+
+    pub fn rect(&self) -> Rectangle {
+        self.clone().into()
     }
 }

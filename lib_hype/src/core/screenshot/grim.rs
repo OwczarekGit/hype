@@ -14,7 +14,7 @@ impl Grim {
             .arg(format!("{},{} {}x{}", rect.0, rect.1, rect.2, rect.3))
             .arg(output)
             .spawn()?;
-        
+
         Ok(())
     }
 }

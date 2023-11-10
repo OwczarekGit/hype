@@ -3,7 +3,14 @@ use std::path::PathBuf;
 use arguments::Arguments;
 use chrono::{Datelike, Local, Timelike};
 use clap::Parser;
-use lib_hype::core::{screenshot::{grim::Grim, slurp::Slurp}, notification::{Notification, Urgency}};
+use lib_hype::{
+    core::{
+        notification::{Notification, Urgency},
+        rectangle::Rectangle,
+        screenshot::{grim::Grim, slurp::Slurp},
+    },
+    hyprland::hyprctl::monitors::Monitor,
+};
 mod arguments;
 
 fn main() {
@@ -11,20 +18,30 @@ fn main() {
     let slurp = Slurp;
 
     match args.command {
-        arguments::Command::ScreenshotRect { output } => {
+        arguments::Command::Selection { output } => {
             let path = resolve_output_path(output);
             let rect = slurp.select_rectangle().expect("Rectangle to be selected");
-            if !rect.is_zero_size() {
-                if Grim::screenshot_rect(rect, &path).is_ok() {
-                    Notification::send(
-                        "Screenshot saved",
-                        path.to_str().unwrap(),
-                        Urgency::Low
-                    );
+            if !rect.is_zero_size() && Grim::screenshot_rect(rect, &path).is_ok() {
+                Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
+            }
+        }
+        arguments::Command::Monitor { output } => {
+            let Ok(p) = slurp.select_point() else {
+                return;
+            };
+
+            let mon = Monitor::get_all().expect("The list of monitors.");
+            let monitor = mon
+                .into_iter()
+                .find(|m| p.inside(&Rectangle::from(m.clone())));
+
+            if let Some(monitor) = monitor {
+                let path = resolve_output_path(output);
+                if Grim::screenshot_rect(Rectangle::from(monitor), &path).is_ok() {
+                    Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
                 }
             }
         }
-        arguments::Command::Screenshot { output } => todo!(),
     }
 }
 

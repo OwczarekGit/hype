@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use serde::{Deserialize, Serialize};
 
-use crate::hyprland::hyprctl::clients::Client;
+use crate::hyprland::hyprctl::{clients::Client, monitors::Monitor};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
 pub struct Rectangle(i64, i64, i64, i64);
@@ -18,6 +18,10 @@ impl Rectangle {
     pub fn is_zero_size(&self) -> bool {
         self.0 == 0 && self.1 == 0 && self.2 == 0 && self.3 == 0
     }
+
+    pub fn inside(&self, other: &Rectangle) -> bool {
+        !(self.0 < other.0 || self.0 + self.2 > other.0 + other.2 || self.1 < other.1)
+    }
 }
 
 impl From<Client> for Rectangle {
@@ -31,7 +35,13 @@ impl From<Client> for Rectangle {
     }
 }
 
-impl From<Rectangle> for (i64,i64,i64,i64) {
+impl From<Monitor> for Rectangle {
+    fn from(v: Monitor) -> Self {
+        Self(v.x, v.y, v.width, v.height)
+    }
+}
+
+impl From<Rectangle> for (i64, i64, i64, i64) {
     fn from(v: Rectangle) -> Self {
         (v.0, v.1, v.2, v.3)
     }

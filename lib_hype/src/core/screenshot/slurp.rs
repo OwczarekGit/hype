@@ -22,6 +22,8 @@ impl Slurp {
         let x = String::from_utf8(
             std::process::Command::new("slurp")
                 .arg("-p")
+                .arg("-b")
+                .arg("00000000")
                 .arg("-f")
                 .arg("%x %y %w %h")
                 .output()
