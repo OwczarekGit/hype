@@ -58,10 +58,21 @@ impl Collection {
     pub fn add_to_collection(&mut self, name: &str, paths: Vec<PathBuf>) {
         match self.collections.entry(name.to_string()) {
             Entry::Occupied(vec) => {
-                vec.into_mut().extend(paths);
+                vec.into_mut().extend(
+                    paths
+                        .iter()
+                        .filter_map(|p| p.canonicalize().ok())
+                        .collect::<Vec<_>>()
+                );
             }
             Entry::Vacant(entry) => {
-                entry.insert(HashSet::from_iter(paths));
+                entry.insert(HashSet::from_iter(
+                    paths
+                        .iter()
+                        .filter_map(|p| p.canonicalize().ok())
+                        .collect::<Vec<_>>()
+                    )
+                );
             }
         };
     }
