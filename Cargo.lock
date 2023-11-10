@@ -136,6 +136,7 @@ name = "hype-wallpaper"
 version = "0.1.0"
 dependencies = [
  "clap",
+ "lib_hype",
  "rand",
  "serde",
  "serde_json",
@@ -157,6 +158,14 @@ name = "itoa"
 version = "1.0.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af150ab688ff2122fcef229be89cb50dd66af9e01a4ff320cc137eecc9bacc38"
+
+[[package]]
+name = "lib_hype"
+version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "lib_theme"

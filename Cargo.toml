@@ -3,5 +3,6 @@ resolver = "2"
 members = [
     "theme",
     "lib_theme",
+    "lib_hype",
     "hype-wallpaper",
 ]

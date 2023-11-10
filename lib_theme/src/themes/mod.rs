@@ -1,7 +1,7 @@
+pub mod catppuccin_frappe;
 pub mod rose_pine_moon;
 pub mod solarized_dark;
 pub mod solarized_light;
-pub mod catppuccin_frappe;
 
 #[macro_export]
 macro_rules! define_theme {

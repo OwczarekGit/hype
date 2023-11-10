@@ -1,11 +1,10 @@
 mod arguments;
 mod collection;
-mod hyprpaper;
 
 use arguments::Arguments;
 use clap::Parser;
 use collection::Collection;
-use hyprpaper::Hyprpaper;
+use lib_hype::hyprland::hyprctl::hyprpaper::Hyprpaper;
 use std::path::PathBuf;
 
 fn default_config_directory() -> PathBuf {
@@ -43,7 +42,6 @@ fn main() -> Result<(), String> {
     };
 
     let mut col = Collection::from_file(&config)?;
-    let hyprpaper = Hyprpaper;
 
     match args.command {
         arguments::Command::Collection { collection_command } => match collection_command {
@@ -75,14 +73,14 @@ fn main() -> Result<(), String> {
         arguments::Command::Wallpaper { wallpaper_command } => match wallpaper_command {
             arguments::WallpaperCommand::Set { collection, file } => {
                 let path = col.set_wallpaper(&collection, &file)?;
-                hyprpaper.set_wallpaper(&path);
-                hyprpaper.save_wallpaper(&path);
+                Hyprpaper::set_wallpaper(&path);
+                Hyprpaper::save_wallpaper(&path);
             }
             arguments::WallpaperCommand::Random { collection, save } => {
                 let wall = col.random_from_collection(&collection)?;
-                hyprpaper.set_wallpaper(&wall);
+                Hyprpaper::set_wallpaper(&wall);
                 if save {
-                    hyprpaper.save_wallpaper(&wall);
+                    Hyprpaper::save_wallpaper(&wall);
                 }
             }
         },
