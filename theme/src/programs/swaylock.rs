@@ -1,14 +1,13 @@
-use std::path::PathBuf;
-
 use lib_theme::core::themeable::Themeable;
 
-use super::config_directory;
+use crate::create_config_dir_and_file;
+
 
 pub struct Swaylock;
 
 impl Themeable for Swaylock {
     fn path(&self) -> std::path::PathBuf {
-        PathBuf::from(config_directory() + "/swaylock/config")
+        create_config_dir_and_file!("swaylock", "config")
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {

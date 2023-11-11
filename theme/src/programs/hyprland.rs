@@ -1,14 +1,12 @@
-use std::path::PathBuf;
-
 use lib_theme::core::themeable::Themeable;
 
-use super::config_directory;
+use crate::create_config_dir_and_file;
 
 pub struct Hyprland;
 
 impl Themeable for Hyprland {
     fn path(&self) -> std::path::PathBuf {
-        PathBuf::from(config_directory() + "/hypr/theme.conf")
+        create_config_dir_and_file!("hypr", "theme.conf")
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
