@@ -5,17 +5,19 @@ use chrono::{Datelike, Local, Timelike};
 use clap::Parser;
 use lib_hype::{
     core::{
+        dirs::{ConfigDirectory, THEMES_CONFIG_FILE},
         notification::{Notification, Urgency},
         rectangle::Rectangle,
         screenshot::{grim::Grim, slurp::Slurp},
     },
     hyprland::hyprctl::monitors::Monitor,
 };
+use lib_theme::core::theme::Theme;
 mod arguments;
 
 fn main() {
     let args = Arguments::parse();
-    let slurp = Slurp;
+    let slurp = get_slurp();
 
     match args.command {
         arguments::Command::Selection { output } => {
@@ -75,4 +77,20 @@ pub fn default_file_name(suf: &str) -> String {
         now.second(),
         suf,
     )
+}
+
+pub fn get_slurp() -> Slurp {
+    if let Ok(path) = ConfigDirectory::create_config_file_in_hype(THEMES_CONFIG_FILE) {
+        if let Ok(text) = std::fs::read_to_string(path) {
+            if let Ok(theme) = toml::from_str::<Theme>(&text) {
+                Slurp::with_theme(theme)
+            } else {
+                Slurp::default()
+            }
+        } else {
+            Slurp::default()
+        }
+    } else {
+        Slurp::default()
+    }
 }

@@ -1,4 +1,5 @@
 use serde::{Deserialize, Serialize};
+use std::{io::Write, path::PathBuf};
 
 use super::terminal_colors::TerminalColors;
 
@@ -28,6 +29,13 @@ impl Theme {
             variant,
             palette,
         }
+    }
+
+    pub fn save(&self, path: &PathBuf) -> Result<(), ThemeError> {
+        let mut file = std::fs::File::create(path)?;
+        let parsed = toml::to_string_pretty(self)?;
+        file.write_all(parsed.as_bytes())?;
+        Ok(())
     }
 
     pub fn palette(&self) -> TerminalColors {
@@ -75,5 +83,23 @@ impl Theme {
             colors.bright_cyan().hex_rgb(),
             colors.bright_white().hex_rgb(),
         )
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum ThemeError {
+    IoError,
+    ParseError,
+}
+
+impl From<toml::ser::Error> for ThemeError {
+    fn from(_: toml::ser::Error) -> Self {
+        Self::ParseError
+    }
+}
+
+impl From<std::io::Error> for ThemeError {
+    fn from(_: std::io::Error) -> Self {
+        Self::IoError
     }
 }

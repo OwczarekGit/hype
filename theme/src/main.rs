@@ -1,4 +1,5 @@
 mod programs;
+use lib_hype::core::dirs::ConfigDirectory;
 use lib_theme::core::themeable::Themeable;
 
 fn main() {
@@ -9,4 +10,8 @@ fn main() {
     programs::waybar::Waybar.apply(&theme);
     programs::swaylock::Swaylock.apply(&theme);
     programs::mako::Mako.apply(&theme);
+
+    if let Ok(path) = ConfigDirectory::create_config_file_in_hype("theme") {
+        let _ = theme.save(&path);
+    }
 }

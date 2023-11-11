@@ -1,5 +1,7 @@
 use std::path::PathBuf;
 
+pub static THEMES_CONFIG_FILE: &str = "theme";
+
 pub fn home_dir() -> PathBuf {
     PathBuf::from(env!("HOME"))
 }
