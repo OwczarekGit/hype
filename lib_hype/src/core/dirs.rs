@@ -24,7 +24,7 @@ impl ConfigDirectory {
         std::fs::create_dir_all(&dir)?;
         Ok(dir)
     }
-    
+
     pub fn get_create_config_subdir(path: impl Into<PathBuf>) -> Result<PathBuf, std::io::Error> {
         let mut dir = config_dir();
         dir.push(path.into());

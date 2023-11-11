@@ -50,6 +50,10 @@ impl Color {
             self.a()
         )
     }
+
+    pub fn with_alpha(&self, a: f32) -> Self {
+        (self.r(), self.g(), self.b(), (255_f32 * a) as u8).into()
+    }
 }
 
 impl From<(u8, u8, u8)> for Color {
@@ -234,5 +238,35 @@ mod tests {
         assert_eq!(c.g(), 0xAA);
         assert_eq!(c.b(), 0xCC);
         assert_eq!(c.a(), 0x22);
+    }
+
+    #[test]
+    pub fn with_alpha() {
+        let c: Color = "ABCDEF44".into();
+        let with_alpha = c.with_alpha(0.5);
+        assert_eq!(with_alpha.r(), 0xAB);
+        assert_eq!(with_alpha.g(), 0xCD);
+        assert_eq!(with_alpha.b(), 0xEF);
+        assert_eq!(with_alpha.a(), 127);
+    }
+
+    #[test]
+    pub fn with_alpha_more_than_1_0() {
+        let c: Color = "ABCDEF44".into();
+        let with_alpha = c.with_alpha(123.0);
+        assert_eq!(with_alpha.r(), 0xAB);
+        assert_eq!(with_alpha.g(), 0xCD);
+        assert_eq!(with_alpha.b(), 0xEF);
+        assert_eq!(with_alpha.a(), 255);
+    }
+
+    #[test]
+    pub fn with_alpha_less_than_1_0() {
+        let c: Color = "ABCDEF44".into();
+        let with_alpha = c.with_alpha(-22.0);
+        assert_eq!(with_alpha.r(), 0xAB);
+        assert_eq!(with_alpha.g(), 0xCD);
+        assert_eq!(with_alpha.b(), 0xEF);
+        assert_eq!(with_alpha.a(), 0);
     }
 }

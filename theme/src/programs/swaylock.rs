@@ -2,7 +2,6 @@ use lib_theme::core::themeable::Themeable;
 
 use crate::create_config_dir_and_file;
 
-
 pub struct Swaylock;
 
 impl Themeable for Swaylock {

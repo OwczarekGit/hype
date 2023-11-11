@@ -5,6 +5,8 @@
       <sourceFolder url="file://$MODULE_DIR$/hype-wallpaper/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib_theme/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/theme/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/hype-shot/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/lib_hype/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
