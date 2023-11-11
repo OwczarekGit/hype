@@ -19,16 +19,23 @@ pub fn hype_config_dir() -> PathBuf {
 pub struct ConfigDirectory;
 
 impl ConfigDirectory {
-    pub fn get_create_hype_config_dir() -> Result<PathBuf, std::io::Error> {
-        let dir = hype_config_dir();
-        std::fs::create_dir_all(&dir)?;
-        Ok(dir)
+    pub fn create_config_file(cfg: impl Into<PathBuf>) -> Result<PathBuf, std::io::Error> {
+        let mut config_file = config_dir();
+        let cfg: PathBuf = cfg.into();
+        config_file.push(cfg);
+        if let Some(p) = config_file.parent() {
+            std::fs::create_dir_all(p)?;
+        }
+        Ok(config_file)
     }
 
-    pub fn get_create_config_subdir(path: impl Into<PathBuf>) -> Result<PathBuf, std::io::Error> {
-        let mut dir = config_dir();
-        dir.push(path.into());
-        std::fs::create_dir_all(&dir)?;
-        Ok(dir)
+    pub fn create_config_file_in_hype(cfg: impl Into<PathBuf>) -> Result<PathBuf, std::io::Error> {
+        let mut config_file = hype_config_dir();
+        let cfg: PathBuf = cfg.into();
+        config_file.push(cfg);
+        if let Some(p) = config_file.parent() {
+            std::fs::create_dir_all(p)?;
+        }
+        Ok(config_file)
     }
 }

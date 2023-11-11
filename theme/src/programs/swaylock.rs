@@ -1,12 +1,11 @@
+use lib_hype::core::dirs::ConfigDirectory;
 use lib_theme::core::themeable::Themeable;
-
-use crate::create_config_dir_and_file;
 
 pub struct Swaylock;
 
 impl Themeable for Swaylock {
     fn path(&self) -> std::path::PathBuf {
-        create_config_dir_and_file!("swaylock", "config")
+        ConfigDirectory::create_config_file("swaylock/config").expect("No io access")
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {

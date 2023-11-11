@@ -1,12 +1,11 @@
+use lib_hype::core::dirs::ConfigDirectory;
 use lib_theme::core::themeable::Themeable;
-
-use crate::create_config_dir_and_file;
 
 pub struct Hyprland;
 
 impl Themeable for Hyprland {
     fn path(&self) -> std::path::PathBuf {
-        create_config_dir_and_file!("hypr", "theme.conf")
+        ConfigDirectory::create_config_file("hypr/theme.conf").expect("No io access")
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {

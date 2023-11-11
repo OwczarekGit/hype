@@ -1,13 +1,12 @@
+use lib_hype::core::dirs::ConfigDirectory;
 use lib_theme::core::themeable::Themeable;
 use std::path::PathBuf;
-
-use crate::create_config_dir_and_file;
 
 pub struct Alacritty;
 
 impl Themeable for Alacritty {
     fn path(&self) -> PathBuf {
-        create_config_dir_and_file!("alacritty", "theme.yml")
+        ConfigDirectory::create_config_file("alacritty/theme.yml").expect("No io access")
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {

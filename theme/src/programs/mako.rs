@@ -1,12 +1,11 @@
+use lib_hype::core::dirs::ConfigDirectory;
 use lib_theme::core::themeable::Themeable;
-
-use crate::create_config_dir_and_file;
 
 pub struct Mako;
 
 impl Themeable for Mako {
     fn path(&self) -> std::path::PathBuf {
-        create_config_dir_and_file!("mako", "config")
+        ConfigDirectory::create_config_file("mako/config").expect("No io access")
     }
 
     fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
