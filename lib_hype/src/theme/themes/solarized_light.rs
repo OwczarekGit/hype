@@ -1,10 +1,11 @@
-use crate::{core::theme::Variant, define_theme};
+use crate::define_theme;
+use crate::theme::core::theme::Variant;
 
 define_theme!(
-    "Solarized Dark",
+    "Solarized Light",
     Variant::Dark,
-    "#002B36",
-    "#93A1A1",
+    "#FDF6E3",
+    "#586E75",
     "#002B36",
     "#DC322F",
     "#859900",

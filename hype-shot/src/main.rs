@@ -3,6 +3,7 @@ use std::path::PathBuf;
 use arguments::Arguments;
 use chrono::{Datelike, Local, Timelike};
 use clap::Parser;
+use lib_hype::theme::core::theme::Theme;
 use lib_hype::{
     core::{
         dirs::{ConfigDirectory, THEMES_CONFIG_FILE},
@@ -12,7 +13,6 @@ use lib_hype::{
     },
     hyprland::hyprctl::monitors::Monitor,
 };
-use lib_theme::core::theme::Theme;
 mod arguments;
 
 fn main() {

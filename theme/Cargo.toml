@@ -6,6 +6,5 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-lib_theme = {path = "../lib_theme"}
 lib_hype = {path = "../lib_hype"}
 toml = "0.8.8"

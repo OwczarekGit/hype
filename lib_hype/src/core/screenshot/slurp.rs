@@ -1,6 +1,5 @@
-use lib_theme::core::theme::Theme;
-
 use crate::core::rectangle::Rectangle;
+use crate::theme::core::theme::Theme;
 use std::str::FromStr;
 
 #[derive(Debug, Default)]

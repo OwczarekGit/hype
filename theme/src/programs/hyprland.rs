@@ -1,5 +1,5 @@
 use lib_hype::core::dirs::ConfigDirectory;
-use lib_theme::core::themeable::Themeable;
+use lib_hype::theme::core::themeable::Themeable;
 
 pub struct Hyprland;
 
@@ -8,7 +8,7 @@ impl Themeable for Hyprland {
         ConfigDirectory::create_config_file("hypr/theme.conf").expect("No io access")
     }
 
-    fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
+    fn content(&self, theme: &lib_hype::theme::core::theme::Theme) -> String {
         format!(
             r#"## Remember to source this file in your hyprland.conf
 $background = {}

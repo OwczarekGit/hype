@@ -676,7 +676,6 @@ dependencies = [
  "chrono",
  "clap",
  "lib_hype",
- "lib_theme",
  "serde",
  "serde_json",
  "toml",
@@ -766,16 +765,7 @@ dependencies = [
 name = "lib_hype"
 version = "0.1.0"
 dependencies = [
- "lib_theme",
  "notify-rust",
- "serde",
- "serde_json",
-]
-
-[[package]]
-name = "lib_theme"
-version = "0.1.0"
-dependencies = [
  "serde",
  "serde_json",
  "toml",
@@ -1304,7 +1294,6 @@ name = "theme"
 version = "0.1.0"
 dependencies = [
  "lib_hype",
- "lib_theme",
  "toml",
 ]
 

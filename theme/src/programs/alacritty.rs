@@ -1,5 +1,5 @@
 use lib_hype::core::dirs::ConfigDirectory;
-use lib_theme::core::themeable::Themeable;
+use lib_hype::theme::core::themeable::Themeable;
 use std::path::PathBuf;
 
 pub struct Alacritty;
@@ -9,7 +9,7 @@ impl Themeable for Alacritty {
         ConfigDirectory::create_config_file("alacritty/theme.yml").expect("No io access")
     }
 
-    fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
+    fn content(&self, theme: &lib_hype::theme::core::theme::Theme) -> String {
         format!(
             r#"# Remember to import this file in your alacritty.yml
 colors:

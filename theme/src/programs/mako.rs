@@ -1,5 +1,5 @@
 use lib_hype::core::dirs::ConfigDirectory;
-use lib_theme::core::themeable::Themeable;
+use lib_hype::theme::core::themeable::Themeable;
 
 pub struct Mako;
 
@@ -8,7 +8,7 @@ impl Themeable for Mako {
         ConfigDirectory::create_config_file("mako/config").expect("No io access")
     }
 
-    fn content(&self, theme: &lib_theme::core::theme::Theme) -> String {
+    fn content(&self, theme: &lib_hype::theme::core::theme::Theme) -> String {
         format!(
             r#"background-color={}
 text-color={}

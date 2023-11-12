@@ -1,4 +1,5 @@
-use crate::{core::theme::Variant, define_theme};
+use crate::define_theme;
+use crate::theme::core::theme::Variant;
 
 define_theme!(
     "Catppuccin Frappe",

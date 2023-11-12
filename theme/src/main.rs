@@ -1,9 +1,9 @@
 mod programs;
 use lib_hype::core::dirs::ConfigDirectory;
-use lib_theme::core::themeable::Themeable;
+use lib_hype::theme::core::themeable::Themeable;
 
 fn main() {
-    let theme = lib_theme::themes::catppuccin_frappe::theme();
+    let theme = lib_hype::theme::themes::catppuccin_frappe::theme();
     programs::alacritty::Alacritty.apply(&theme);
     programs::wofi::Wofi.apply(&theme);
     programs::hyprland::Hyprland.apply(&theme);

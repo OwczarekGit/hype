@@ -9,7 +9,6 @@ edition = "2021"
 chrono = "0.4.31"
 clap = { version = "4.4.7", features = ["derive"] }
 lib_hype = {path = "../lib_hype"}
-lib_theme = {path = "../lib_theme"}
 serde = { version = "1.0.192", features = ["derive"] }
 serde_json = "1.0.108"
 toml = "0.8.8"
