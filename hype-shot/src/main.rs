@@ -3,10 +3,12 @@ use std::path::PathBuf;
 use arguments::Arguments;
 use chrono::{Datelike, Local, Timelike};
 use clap::Parser;
+use lib_hype::core::dirs::hype_config_dir;
 use lib_hype::theme::core::theme::Theme;
+use lib_hype::core::screenshot::screenshoter::Screenshoter;
 use lib_hype::{
     core::{
-        dirs::{ConfigDirectory, THEMES_CONFIG_FILE},
+        dirs::THEMES_CONFIG_FILE,
         notification::{Notification, Urgency},
         rectangle::Rectangle,
         screenshot::{grim::Grim, slurp::Slurp},
@@ -17,13 +19,15 @@ mod arguments;
 
 fn main() {
     let args = Arguments::parse();
-    let slurp = get_slurp();
+    let slurp = get_slurp().unwrap_or_default();
+    dbg!(&slurp);
+    let grim = Grim;
 
     match args.command {
         arguments::Command::Selection { output } => {
             let path = resolve_output_path(output);
             let rect = slurp.select_rectangle().expect("Rectangle to be selected");
-            if !rect.is_zero_size() && Grim::screenshot_rect(rect, &path).is_ok() {
+            if !rect.is_zero_size() && grim.screenshot_rect(rect, &path).is_ok() {
                 Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
             }
         }
@@ -39,7 +43,7 @@ fn main() {
 
             if let Some(monitor) = monitor {
                 let path = resolve_output_path(output);
-                if Grim::screenshot_rect(Rectangle::from(monitor), &path).is_ok() {
+                if grim.screenshot_rect(Rectangle::from(monitor), &path).is_ok() {
                     Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
                 }
             }
@@ -79,18 +83,9 @@ pub fn default_file_name(suf: &str) -> String {
     )
 }
 
-pub fn get_slurp() -> Slurp {
-    if let Ok(path) = ConfigDirectory::create_config_file_in_hype(THEMES_CONFIG_FILE) {
-        if let Ok(text) = std::fs::read_to_string(path) {
-            if let Ok(theme) = toml::from_str::<Theme>(&text) {
-                Slurp::with_theme(theme)
-            } else {
-                Slurp::default()
-            }
-        } else {
-            Slurp::default()
-        }
-    } else {
-        Slurp::default()
-    }
+pub fn get_slurp() -> Option<Slurp> {
+    let mut path = hype_config_dir();
+    path.push(THEMES_CONFIG_FILE);
+    let text = std::fs::read_to_string(path).ok()?;
+    Some(Slurp::with_theme(toml::from_str::<Theme>(&text).ok()?))
 }

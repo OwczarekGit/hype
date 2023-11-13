@@ -2,6 +2,8 @@ use crate::core::rectangle::Rectangle;
 use crate::theme::core::theme::Theme;
 use std::str::FromStr;
 
+use super::selection;
+
 #[derive(Debug, Default)]
 pub struct Slurp {
     theme: Option<Theme>,
@@ -14,7 +16,7 @@ impl Slurp {
 }
 
 impl Slurp {
-    pub fn select_rectangle(&self) -> Result<Rectangle, SlurpError> {
+    pub fn select_rectangle(&self) -> Result<Rectangle, selection::Error> {
         let mut cmd = std::process::Command::new("slurp");
         cmd.arg("-f");
         cmd.arg("%x %y %w %h");
@@ -26,14 +28,14 @@ impl Slurp {
             cmd.arg(theme.palette().bright_red().with_alpha(0.75).hex_rgba());
         }
 
-        let cmd = cmd.output().map_err(|_| SlurpError::IoError)?.stdout;
+        let cmd = cmd.output().map_err(|_| selection::Error::IoError)?.stdout;
 
-        let text = String::from_utf8(cmd).map_err(|_| SlurpError::InvalidEncoding)?;
+        let text = String::from_utf8(cmd).map_err(|_| selection::Error::InvalidEncoding)?;
 
-        Rectangle::from_str(&text).map_err(|_| SlurpError::InvalidSlurpRectangle)
+        Rectangle::from_str(&text).map_err(|_| selection::Error::InvalidSlurpRectangle)
     }
 
-    pub fn select_point(&self) -> Result<Rectangle, SlurpError> {
+    pub fn select_point(&self) -> Result<Rectangle, selection::Error> {
         let x = String::from_utf8(
             std::process::Command::new("slurp")
                 .arg("-p")
@@ -42,19 +44,11 @@ impl Slurp {
                 .arg("-f")
                 .arg("%x %y %w %h")
                 .output()
-                .map_err(|_| SlurpError::IoError)?
+                .map_err(|_| selection::Error::IoError)?
                 .stdout,
         )
-        .map_err(|_| SlurpError::InvalidEncoding)?;
+        .map_err(|_| selection::Error::InvalidEncoding)?;
 
-        Rectangle::from_str(&x).map_err(|_| SlurpError::InvalidSlurpRectangle)
+        Rectangle::from_str(&x).map_err(|_| selection::Error::InvalidSlurpRectangle)
     }
-}
-
-#[derive(Debug, Clone)]
-pub enum SlurpError {
-    InvalidEncoding,
-    InvalidFormat,
-    InvalidSlurpRectangle,
-    IoError,
 }

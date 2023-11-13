@@ -1,9 +1,12 @@
 use std::path::Path;
 
+use super::screenshoter::Screenshoter;
+
 pub struct Grim;
 
-impl Grim {
-    pub fn screenshot_rect(
+impl Screenshoter for Grim {
+    fn screenshot_rect(
+        &self,
         rect: impl Into<(i64, i64, i64, i64)>,
         output: &Path,
     ) -> Result<(), std::io::Error> {
