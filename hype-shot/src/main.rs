@@ -4,8 +4,9 @@ use arguments::Arguments;
 use chrono::{Datelike, Local, Timelike};
 use clap::Parser;
 use lib_hype::core::dirs::hype_config_dir;
-use lib_hype::theme::core::theme::Theme;
 use lib_hype::core::screenshot::screenshoter::Screenshoter;
+use lib_hype::core::screenshot::selection::Selection;
+use lib_hype::theme::core::theme::Theme;
 use lib_hype::{
     core::{
         dirs::THEMES_CONFIG_FILE,
@@ -20,7 +21,6 @@ mod arguments;
 fn main() {
     let args = Arguments::parse();
     let slurp = get_slurp().unwrap_or_default();
-    dbg!(&slurp);
     let grim = Grim;
 
     match args.command {
@@ -32,20 +32,17 @@ fn main() {
             }
         }
         arguments::Command::Monitor { output } => {
-            let Ok(p) = slurp.select_point() else {
+            let Ok(monitor) = slurp.select_monitor(Monitor::get_all().expect("Monitor list."))
+            else {
                 return;
             };
 
-            let mon = Monitor::get_all().expect("The list of monitors.");
-            let monitor = mon
-                .into_iter()
-                .find(|m| p.inside(&Rectangle::from(m.clone())));
-
-            if let Some(monitor) = monitor {
-                let path = resolve_output_path(output);
-                if grim.screenshot_rect(Rectangle::from(monitor), &path).is_ok() {
-                    Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
-                }
+            let path = resolve_output_path(output);
+            if grim
+                .screenshot_rect(Rectangle::from(monitor), &path)
+                .is_ok()
+            {
+                Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
             }
         }
     }

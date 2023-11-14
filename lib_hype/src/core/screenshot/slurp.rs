@@ -1,8 +1,8 @@
-use crate::core::rectangle::Rectangle;
 use crate::theme::core::theme::Theme;
+use crate::{core::rectangle::Rectangle, hyprland::hyprctl::monitors::Monitor};
 use std::str::FromStr;
 
-use super::selection;
+use super::selection::{self, Selection};
 
 #[derive(Debug, Default)]
 pub struct Slurp {
@@ -15,8 +15,8 @@ impl Slurp {
     }
 }
 
-impl Slurp {
-    pub fn select_rectangle(&self) -> Result<Rectangle, selection::Error> {
+impl Selection for Slurp {
+    fn select_rectangle(&self) -> Result<Rectangle, selection::Error> {
         let mut cmd = std::process::Command::new("slurp");
         cmd.arg("-f");
         cmd.arg("%x %y %w %h");
@@ -35,7 +35,7 @@ impl Slurp {
         Rectangle::from_str(&text).map_err(|_| selection::Error::InvalidSlurpRectangle)
     }
 
-    pub fn select_point(&self) -> Result<Rectangle, selection::Error> {
+    fn select_point(&self) -> Result<Rectangle, selection::Error> {
         let x = String::from_utf8(
             std::process::Command::new("slurp")
                 .arg("-p")
@@ -50,5 +50,13 @@ impl Slurp {
         .map_err(|_| selection::Error::InvalidEncoding)?;
 
         Rectangle::from_str(&x).map_err(|_| selection::Error::InvalidSlurpRectangle)
+    }
+
+    fn select_monitor(&self, monitors: Vec<Monitor>) -> Result<Monitor, selection::Error> {
+        let point = self.select_point()?;
+        monitors
+            .into_iter()
+            .find(|m| point.inside(&Rectangle::from(m.clone())))
+            .ok_or(selection::Error::MonitorNotFound)
     }
 }
