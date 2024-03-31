@@ -4,7 +4,7 @@ mod collection;
 use arguments::Arguments;
 use clap::Parser;
 use collection::Collection;
-use lib_hype::hyprland::hyprctl::hyprpaper::Hyprpaper;
+use lib_hype::core::wallpaper::{hyprpaper::Hyprpaper, swww::Swww, WallpaperDaemon};
 use std::path::PathBuf;
 
 fn default_config_directory() -> PathBuf {
@@ -73,14 +73,16 @@ fn main() -> Result<(), String> {
         arguments::Command::Wallpaper { wallpaper_command } => match wallpaper_command {
             arguments::WallpaperCommand::Set { collection, file } => {
                 let path = col.set_wallpaper(&collection, &file)?;
-                Hyprpaper::set_wallpaper(&path);
-                Hyprpaper::save_wallpaper(&path);
+                match args.backend {
+                    arguments::WallpaperBackend::Swww => Swww.set_wallpaper(&path),
+                    arguments::WallpaperBackend::Hyprpaper => Hyprpaper(false).set_wallpaper(&path),
+                }
             }
             arguments::WallpaperCommand::Random { collection, save } => {
                 let wall = col.random_from_collection(&collection)?;
-                Hyprpaper::set_wallpaper(&wall);
-                if save {
-                    Hyprpaper::save_wallpaper(&wall);
+                match args.backend {
+                    arguments::WallpaperBackend::Swww => Swww.set_wallpaper(&wall),
+                    arguments::WallpaperBackend::Hyprpaper => Hyprpaper(save).set_wallpaper(&wall),
                 }
             }
         },

@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 
 pub mod clients;
 pub mod cursorpos;
-pub mod hyprpaper;
 pub mod monitors;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]

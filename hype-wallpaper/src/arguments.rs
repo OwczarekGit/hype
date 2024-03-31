@@ -1,6 +1,6 @@
-use std::path::PathBuf;
+use std::{fmt::Display, path::PathBuf};
 
-use clap::{Parser, Subcommand};
+use clap::{Parser, Subcommand, ValueEnum};
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug, Clone, Parser)]
@@ -9,6 +9,24 @@ pub struct Arguments {
     pub command: Command,
     #[arg(long)]
     pub config: Option<PathBuf>,
+    #[arg(long, short, default_value_t = WallpaperBackend::Swww)]
+    pub backend: WallpaperBackend,
+}
+
+#[derive(Serialize, Deserialize, Debug, Default, Clone, ValueEnum)]
+pub enum WallpaperBackend {
+    #[default]
+    Swww,
+    Hyprpaper,
+}
+
+impl Display for WallpaperBackend {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            WallpaperBackend::Swww => write!(f, "swww"),
+            WallpaperBackend::Hyprpaper => write!(f, "hyprpaper"),
+        }
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Subcommand)]
