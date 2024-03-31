@@ -6,34 +6,35 @@ pub struct Alacritty;
 
 impl Themeable for Alacritty {
     fn path(&self) -> PathBuf {
-        ConfigDirectory::create_config_file("alacritty/theme.yml").expect("No io access")
+        ConfigDirectory::create_config_file("alacritty/theme.toml").expect("No io access")
     }
 
     fn content(&self, theme: &lib_hype::theme::core::theme::Theme) -> String {
         format!(
-            r#"# Remember to import this file in your alacritty.yml
-colors:
-    primary:
-        background: '{}'
-        foreground: '{}'
-    normal:
-        black: '{}'
-        red: '{}'
-        green: '{}'
-        yellow: '{}'
-        blue: '{}'
-        magenta: '{}'
-        cyan: '{}'
-        white: '{}'
-    bright:
-        black: '{}'
-        red: '{}'
-        green: '{}'
-        yellow: '{}'
-        blue: '{}'
-        magenta: '{}'
-        cyan: '{}'
-        white: '{}'"#,
+            r#"# Remember to import this file in your alacritty.toml
+[colors.primary]
+background = '{}'
+foreground = '{}'
+
+[colors.normal]
+black = '{}'
+red = '{}'
+green = '{}'
+yellow = '{}'
+blue = '{}'
+magenta = '{}'
+cyan = '{}'
+white = '{}'
+
+[colors.bright]
+black = '{}'
+red = '{}'
+green = '{}'
+yellow = '{}'
+blue = '{}'
+magenta = '{}'
+cyan = '{}'
+white = '{}'"#,
             theme.palette().background().hex_rgb(),
             theme.palette().foreground().hex_rgb(),
             theme.palette().black().hex_rgb(),

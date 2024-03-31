@@ -10,7 +10,7 @@ impl Themeable for Hyprland {
 
     fn content(&self, theme: &lib_hype::theme::core::theme::Theme) -> String {
         format!(
-            r#"## Remember to source this file in your hyprland.conf
+            r#"# # Remember to source this file in your hyprland.conf
 $background = {}
 $foreground = {}
 $black = {}
