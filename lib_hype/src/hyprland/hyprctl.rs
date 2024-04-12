@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 pub mod clients;
 pub mod cursorpos;
 pub mod monitors;
+pub mod zoom;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub enum HyprctlError {

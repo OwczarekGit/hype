@@ -694,6 +694,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "hype-zoom"
+version = "0.1.0"
+dependencies = [
+ "clap",
+ "lib_hype",
+]
+
+[[package]]
 name = "iana-time-zone"
 version = "0.1.58"
 source = "registry+https://github.com/rust-lang/crates.io-index"
