@@ -12,4 +12,5 @@ pub struct Arguments {
 pub enum Command {
     Monitor { output: Option<PathBuf> },
     Selection { output: Option<PathBuf> },
+    All { output: Option<PathBuf> },
 }

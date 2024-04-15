@@ -20,4 +20,10 @@ impl Screenshoter for Grim {
 
         Ok(())
     }
+
+    fn screenshot_all(&self, output: &Path) -> Result<(), std::io::Error> {
+        std::process::Command::new("grim").arg(output).output()?;
+
+        Ok(())
+    }
 }

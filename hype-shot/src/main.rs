@@ -45,6 +45,13 @@ fn main() {
                 Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
             }
         }
+        arguments::Command::All { output } => {
+            let path = resolve_output_path(output);
+
+            if grim.screenshot_all(&path).is_ok() {
+                Notification::send("Screenshot saved", path.to_str().unwrap(), Urgency::Low);
+            }
+        }
     }
 }
 
