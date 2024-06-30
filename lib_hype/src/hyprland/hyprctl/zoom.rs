@@ -15,7 +15,7 @@ impl Zoom {
     pub fn get() -> f32 {
         let res = Command::new("hyprctl")
             .arg("getoption")
-            .arg("misc:cursor_zoom_factor")
+            .arg("cursor:zoom_factor")
             .arg("-j")
             .output()
             .expect("Hyprctl error")
@@ -30,7 +30,7 @@ impl Zoom {
     pub fn set(value: f32) {
         Command::new("hyprctl")
             .arg("keyword")
-            .arg("misc:cursor_zoom_factor")
+            .arg("cursor:zoom_factor")
             .arg(value.max(1.0).to_string())
             .stdout(Stdio::null())
             .spawn()
